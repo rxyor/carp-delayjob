@@ -1,4 +1,4 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.model;
 
 import java.io.Serializable;
 import lombok.Builder;

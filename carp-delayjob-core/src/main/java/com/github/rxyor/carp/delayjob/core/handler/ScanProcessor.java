@@ -1,5 +1,13 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.handler;
 
+import com.github.rxyor.carp.delayjob.core.consumer.Consumer;
+import com.github.rxyor.carp.delayjob.core.model.DelayJob;
+import com.github.rxyor.carp.delayjob.core.model.Result;
+import com.github.rxyor.carp.delayjob.core.producer.Producer;
+import com.github.rxyor.carp.delayjob.core.repository.FailJobSetRepository;
+import com.github.rxyor.carp.delayjob.core.repository.JobDetailMapRepository;
+import com.github.rxyor.carp.delayjob.core.repository.ReadyJobQueueRepository;
+import com.github.rxyor.carp.delayjob.core.repository.WaitJobZSetRepository;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -20,14 +28,14 @@ import org.redisson.client.protocol.ScoredEntry;
 
 /**
  *<p>
- *
+ * 扫描任务
  *</p>
  *
  * @author liuyang
  * @since 2020-07-08 v1.0
  */
 @Slf4j
-public class Scanner {
+public class ScanProcessor {
 
     private final static ScheduledThreadPoolExecutor SCAN_THREAD = new ScheduledThreadPoolExecutor(1);
     private final static ExecutorService WORKER_THREAD = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.SECONDS,
@@ -39,26 +47,27 @@ public class Scanner {
     });
     private final AtomicBoolean shutdown = new AtomicBoolean(false);
 
-    private final WaitZSet waitZSet;
-    private final ReadyQueue readyQueue;
-    private final JobStoreMap jobStoreMap;
-    private final FailJobSet failJobSet;
+    private final WaitJobZSetRepository waitJobZSetRepository;
+    private final ReadyJobQueueRepository readyJobQueueRepository;
+    private final JobDetailMapRepository jobDetailMapRepository;
+    private final FailJobSetRepository failJobSetRepository;
     private final Producer producer;
     private final JobHandlerDelegate jobHandlerDelegate;
 
-    public Scanner(WaitZSet waitZSet, ReadyQueue readyQueue, JobStoreMap jobStoreMap, FailJobSet failJobSet,
+    public ScanProcessor(WaitJobZSetRepository waitJobZSetRepository, ReadyJobQueueRepository readyJobQueueRepository,
+        JobDetailMapRepository jobDetailMapRepository, FailJobSetRepository failJobSetRepository,
         Producer producer, JobHandlerDelegate delegate) {
-        Objects.requireNonNull(waitZSet, "waitZSet can't be null");
-        Objects.requireNonNull(readyQueue, "readyQueue can't be null");
-        Objects.requireNonNull(jobStoreMap, "jobStoreMap can't be null");
-        Objects.requireNonNull(failJobSet, "failJobSet can't be null");
+        Objects.requireNonNull(waitJobZSetRepository, "waitZSet can't be null");
+        Objects.requireNonNull(readyJobQueueRepository, "readyQueue can't be null");
+        Objects.requireNonNull(jobDetailMapRepository, "jobStoreMap can't be null");
+        Objects.requireNonNull(failJobSetRepository, "failJobSet can't be null");
         Objects.requireNonNull(delegate, "delegate can't be null");
-        Objects.requireNonNull(producer, "delegate can't be null");
+        Objects.requireNonNull(producer, "producer can't be null");
 
-        this.waitZSet = waitZSet;
-        this.readyQueue = readyQueue;
-        this.jobStoreMap = jobStoreMap;
-        this.failJobSet = failJobSet;
+        this.waitJobZSetRepository = waitJobZSetRepository;
+        this.readyJobQueueRepository = readyJobQueueRepository;
+        this.jobDetailMapRepository = jobDetailMapRepository;
+        this.failJobSetRepository = failJobSetRepository;
         this.jobHandlerDelegate = delegate;
         this.producer = producer;
     }
@@ -140,7 +149,7 @@ public class Scanner {
                         producer.offer(delayJob);
                     } else {
                         //记录失败JOB
-                        failJobSet.add(delayJob);
+                        failJobSetRepository.add(delayJob);
                     }
 
                 }
@@ -158,12 +167,12 @@ public class Scanner {
      * @return DelayJob
      */
     public <T extends Serializable> DelayJob<T> popReadyJob(String topic) {
-        String jobId = readyQueue.poll(topic);
+        String jobId = readyJobQueueRepository.poll(topic);
         DelayJob<T> delayJob = null;
         if (jobId != null) {
-            delayJob = jobStoreMap.get(jobId);
+            delayJob = jobDetailMapRepository.get(jobId);
             if (delayJob != null) {
-                jobStoreMap.remove(jobId);
+                jobDetailMapRepository.remove(jobId);
             }
         }
         return delayJob;
@@ -175,7 +184,7 @@ public class Scanner {
     public void popsNowAndPushToReady() {
         long start = 0L;
         long end = System.currentTimeMillis();
-        RScoredSortedSet<String> bucket = waitZSet.getRScoredSortedSet();
+        RScoredSortedSet<String> bucket = waitJobZSetRepository.getRScoredSortedSet();
         Collection<ScoredEntry<String>> readyJobs = bucket.entryRange(start, true, end, true);
         for (ScoredEntry<String> entry : readyJobs) {
             String jobId = entry.getValue();
@@ -183,9 +192,9 @@ public class Scanner {
                 continue;
             }
 
-            DelayJob<?> delayJob = jobStoreMap.get(jobId);
+            DelayJob<?> delayJob = jobDetailMapRepository.get(jobId);
             if (delayJob != null) {
-                readyQueue.offer(delayJob.getTopic(), delayJob.getId());
+                readyJobQueueRepository.offer(delayJob.getTopic(), delayJob.getId());
             }
             bucket.remove(jobId);
         }

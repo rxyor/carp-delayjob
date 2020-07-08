@@ -1,6 +1,6 @@
 package com.github.rxyor.carp.delayjob.samples.controller;
 
-import com.github.rxyor.carp.delayjob.core.Producer;
+import com.github.rxyor.carp.delayjob.core.producer.Producer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,7 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.repository;
 
+import com.github.rxyor.carp.delayjob.core.model.KeyConfig;
+import com.github.rxyor.carp.delayjob.core.model.ClientConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
@@ -12,9 +14,9 @@ import org.redisson.api.RedissonClient;
  * @author liuyang
  * @since 2020-07-08 v1.0
  */
-public class WaitZSet extends ClientConfig {
+public class WaitJobZSetRepository extends ClientConfig {
 
-    public WaitZSet(RedissonClient redissonClient, KeyConfig keyConfig) {
+    public WaitJobZSetRepository(RedissonClient redissonClient, KeyConfig keyConfig) {
         super(redissonClient, keyConfig);
     }
 

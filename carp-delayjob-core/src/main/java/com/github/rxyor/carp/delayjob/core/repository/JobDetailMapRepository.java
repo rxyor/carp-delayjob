@@ -1,5 +1,8 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.repository;
 
+import com.github.rxyor.carp.delayjob.core.model.KeyConfig;
+import com.github.rxyor.carp.delayjob.core.model.ClientConfig;
+import com.github.rxyor.carp.delayjob.core.model.DelayJob;
 import java.io.Serializable;
 import org.redisson.api.RMap;
 import org.redisson.api.RedissonClient;
@@ -12,9 +15,9 @@ import org.redisson.api.RedissonClient;
  * @author liuyang
  * @since 2020-07-08 v1.0
  */
-public class JobStoreMap extends ClientConfig {
+public class JobDetailMapRepository extends ClientConfig {
 
-    public JobStoreMap(RedissonClient redissonClient,
+    public JobDetailMapRepository(RedissonClient redissonClient,
         KeyConfig keyConfig) {
         super(redissonClient, keyConfig);
     }

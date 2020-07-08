@@ -1,5 +1,6 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.producer;
 
+import com.github.rxyor.carp.delayjob.core.model.DelayJob;
 import java.io.Serializable;
 
 /**

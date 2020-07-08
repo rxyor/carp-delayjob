@@ -1,4 +1,6 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.consumer;
+
+import com.github.rxyor.carp.delayjob.core.handler.JobHandler;
 
 /**
  *<p>

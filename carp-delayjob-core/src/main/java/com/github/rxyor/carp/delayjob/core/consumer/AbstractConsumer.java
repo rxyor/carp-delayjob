@@ -1,5 +1,6 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.consumer;
 
+import com.github.rxyor.carp.delayjob.core.handler.JobHandlerDelegate;
 import lombok.extern.slf4j.Slf4j;
 
 /**

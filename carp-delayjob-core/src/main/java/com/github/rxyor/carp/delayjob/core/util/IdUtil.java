@@ -1,4 +1,4 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.util;
 
 import java.util.UUID;
 

@@ -1,4 +1,7 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.handler;
+
+import com.github.rxyor.carp.delayjob.core.model.DelayJob;
+import com.github.rxyor.carp.delayjob.core.model.Result;
 
 /**
  *<p>

@@ -1,5 +1,9 @@
-package com.github.rxyor.carp.delayjob.core;
+package com.github.rxyor.carp.delayjob.core.producer;
 
+import com.github.rxyor.carp.delayjob.core.model.DelayJob;
+import com.github.rxyor.carp.delayjob.core.repository.JobDetailMapRepository;
+import com.github.rxyor.carp.delayjob.core.repository.WaitJobZSetRepository;
+import com.github.rxyor.carp.delayjob.core.util.IdUtil;
 import java.io.Serializable;
 import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
@@ -14,15 +18,15 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class ProducerImpl implements Producer {
 
-    private final WaitZSet waitZSet;
-    private final JobStoreMap jobStoreMap;
+    private final WaitJobZSetRepository waitJobZSetRepository;
+    private final JobDetailMapRepository jobDetailMapRepository;
 
-    public ProducerImpl(WaitZSet waitZSet, JobStoreMap jobStoreMap) {
-        Objects.requireNonNull(waitZSet, "waitZSet can't be null");
-        Objects.requireNonNull(jobStoreMap, "jobStoreMap can't be null");
+    public ProducerImpl(WaitJobZSetRepository waitJobZSetRepository, JobDetailMapRepository jobDetailMapRepository) {
+        Objects.requireNonNull(waitJobZSetRepository, "waitZSet can't be null");
+        Objects.requireNonNull(jobDetailMapRepository, "jobStoreMap can't be null");
 
-        this.waitZSet = waitZSet;
-        this.jobStoreMap = jobStoreMap;
+        this.waitJobZSetRepository = waitJobZSetRepository;
+        this.jobDetailMapRepository = jobDetailMapRepository;
     }
 
     /**
@@ -90,8 +94,8 @@ public class ProducerImpl implements Producer {
             delayJob.setId(IdUtil.randomId());
         }
 
-        waitZSet.offer(delayJob.getId(), delayJob.getExecTime());
-        jobStoreMap.add(delayJob);
+        waitJobZSetRepository.offer(delayJob.getId(), delayJob.getExecTime());
+        jobDetailMapRepository.add(delayJob);
     }
 
 }
