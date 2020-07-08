@@ -11,13 +11,6 @@ package com.github.rxyor.carp.delayjob.core;
 public interface Consumer extends JobHandler {
 
     /**
-     * handler id
-     *
-     * @return handler id
-     */
-    String id();
-
-    /**
      * handler可以处理的topic
      *
      * @return topic

@@ -136,7 +136,7 @@ public class Scanner {
                             newDelay = delayJob.getRetryDelay();
                         }
                         delayJob.setExecTime(System.currentTimeMillis() + newDelay * 1000L);
-                        delayJob.setRetryDelay(delayJob.getRetryDelay() - 1);
+                        delayJob.setRetryTimes(delayJob.getRetryTimes() - 1);
                         producer.offer(delayJob);
                     } else {
                         //记录失败JOB

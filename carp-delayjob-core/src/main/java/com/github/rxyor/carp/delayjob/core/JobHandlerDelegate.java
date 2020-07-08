@@ -19,13 +19,13 @@ import org.apache.commons.lang3.StringUtils;
 public class JobHandlerDelegate implements JobHandler {
 
     /**
+     * 消费者列表
+     */
+    protected final List<Consumer> consumers = new ArrayList<>(64);
+    /**
      * 同步锁
      */
     private final Object LOCK = new Object();
-    /**
-     * 消费者列表
-     */
-    private final List<Consumer> consumers = new ArrayList<>(64);
 
     /**
      * consume DelayJob
@@ -69,9 +69,6 @@ public class JobHandlerDelegate implements JobHandler {
     public Boolean addConsumer(Consumer consumer) {
         Objects.requireNonNull(consumer, "Consumer can't be null");
 
-        if (StringUtils.isBlank(consumer.id())) {
-            throw new IllegalArgumentException("consumer's id can't be blank");
-        }
         if (StringUtils.isBlank(consumer.topic())) {
             throw new IllegalArgumentException("topic can't be blank");
         }
