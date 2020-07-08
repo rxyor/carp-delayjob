@@ -56,6 +56,9 @@ public class DelayJob<T extends Serializable> implements Job {
         if (StringUtils.isBlank(topic)) {
             throw new IllegalArgumentException("topic can't be blank");
         }
+        if (execTime < 0) {
+            throw new IllegalArgumentException("execTime must >= 0");
+        }
         if (retryTimes < 0) {
             throw new IllegalArgumentException("retryTimes must >= 0");
         }

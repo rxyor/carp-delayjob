@@ -59,7 +59,7 @@ public class KeyConfig {
         return prefix() + DEFAULT_READY_TOPIC_KEY_PREFIX + SPLITTER + topic;
     }
 
-    public String jobDetailsKey() {
+    public String jobStoreMapKey() {
         return prefix() + DEFAULT_JOB_DETAILS_KEY;
     }
 

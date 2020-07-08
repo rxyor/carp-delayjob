@@ -14,8 +14,8 @@ import org.redisson.api.RedissonClient;
  */
 public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
 
-    public RedisQueueImpl(RedissonClient redissonClient) {
-        super(redissonClient);
+    public RedisQueueImpl(RedissonClient redissonClient, KeyConfig keyConfig) {
+        super(redissonClient, keyConfig);
     }
 
     /**
@@ -38,7 +38,7 @@ public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
             throw new IllegalArgumentException("jobId can't be blank");
         }
 
-        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(topic);
+        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(keyConfig.readyQueueKey(topic));
         return queue.offer(jobId);
     }
 
@@ -58,7 +58,7 @@ public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
             throw new IllegalArgumentException("topic can't be blank");
         }
 
-        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(topic);
+        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(keyConfig.readyQueueKey(topic));
         return queue.poll();
     }
 
@@ -82,7 +82,7 @@ public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
             throw new IllegalArgumentException("jobId can't be blank");
         }
 
-        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(topic);
+        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(keyConfig.readyQueueKey(topic));
         return queue.remove(jobId);
     }
 }

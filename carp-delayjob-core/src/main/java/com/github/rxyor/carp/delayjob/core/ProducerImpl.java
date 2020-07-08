@@ -15,14 +15,14 @@ import org.apache.commons.lang3.StringUtils;
 public class ProducerImpl {
 
     private final KeyConfig keyConfig;
-    private final RedisQueue<String> waitQueue;
+    private final WaitSortedSet waitSortedSet;
 
-    public ProducerImpl(KeyConfig keyConfig, RedisQueue<String> waitQueue) {
+    public ProducerImpl(KeyConfig keyConfig, WaitSortedSet waitSortedSet) {
         Objects.requireNonNull(keyConfig, "keyConfig can't be null");
-        Objects.requireNonNull(waitQueue, "waitQueue can't be null");
+        Objects.requireNonNull(waitSortedSet, "waitSortedSet can't be null");
 
         this.keyConfig = keyConfig;
-        this.waitQueue = waitQueue;
+        this.waitSortedSet = waitSortedSet;
     }
 
     /**
@@ -55,6 +55,8 @@ public class ProducerImpl {
         if (StringUtils.isBlank(delayJob.getId())) {
             delayJob.setId(IdUtil.randomId());
         }
+
+        waitSortedSet.offer(delayJob.getId(), delayJob.getExecTime());
 
     }
 

@@ -14,9 +14,12 @@ import org.redisson.api.RedissonClient;
 public class ClientConfig {
 
     protected final RedissonClient redissonClient;
+    protected final KeyConfig keyConfig;
 
-    public ClientConfig(RedissonClient redissonClient) {
+    public ClientConfig(RedissonClient redissonClient, KeyConfig keyConfig) {
         Objects.requireNonNull(redissonClient, "redissonClient can't be null");
+        Objects.requireNonNull(keyConfig, "keyConfig can't be null");
         this.redissonClient = redissonClient;
+        this.keyConfig = keyConfig;
     }
 }
