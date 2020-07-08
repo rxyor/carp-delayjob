@@ -10,6 +10,10 @@
     <artifactId>carp-delayjob-samples</artifactId>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.rxyor</groupId>
+            <artifactId>carp-delayjob-starter</artifactId>
+        </dependency>
         <!--test-->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

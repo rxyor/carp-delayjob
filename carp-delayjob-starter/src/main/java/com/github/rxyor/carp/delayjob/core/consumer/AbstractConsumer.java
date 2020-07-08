@@ -2,6 +2,7 @@ package com.github.rxyor.carp.delayjob.core.consumer;
 
 import com.github.rxyor.carp.delayjob.core.handler.JobHandlerDelegate;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 
 /**
  *<p>
@@ -12,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
  * @since 2020-07-08 v1.0
  */
 @Slf4j
-public abstract class AbstractConsumer implements Consumer {
+public abstract class AbstractConsumer implements Consumer, InitializingBean {
 
     /**
      * 需要把自身注册到JobHandlerDelegate
@@ -23,5 +24,10 @@ public abstract class AbstractConsumer implements Consumer {
         if (!success) {
             log.warn("Consumer:[{}] register fail", this.getClass().getName());
         }
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        register();
     }
 }
