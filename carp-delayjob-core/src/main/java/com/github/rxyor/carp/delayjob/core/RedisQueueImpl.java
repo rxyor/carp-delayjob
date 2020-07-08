@@ -1,0 +1,88 @@
+package com.github.rxyor.carp.delayjob.core;
+
+import org.apache.commons.lang3.StringUtils;
+import org.redisson.api.RBlockingQueue;
+import org.redisson.api.RedissonClient;
+
+/**
+ *<p>
+ *  就绪队列
+ *</p>
+ *
+ * @author liuyang
+ * @since 2020-07-08 v1.0
+ */
+public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
+
+    public RedisQueueImpl(RedissonClient redissonClient) {
+        super(redissonClient);
+    }
+
+    /**
+     *<p>
+     *  添加
+     *</p>
+     *
+     * @author liuyang
+     * @since 2020-07-08 15:45:46 v1.0
+     * @param topic topic
+     * @param jobId jobId
+     * @return boolean
+     */
+    @Override
+    public boolean offer(String topic, String jobId) {
+        if (StringUtils.isBlank(topic)) {
+            throw new IllegalArgumentException("topic can't be blank");
+        }
+        if (StringUtils.isBlank(jobId)) {
+            throw new IllegalArgumentException("jobId can't be blank");
+        }
+
+        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(topic);
+        return queue.offer(jobId);
+    }
+
+    /**
+     *<p>
+     * 取出并删除
+     *</p>
+     *
+     * @author liuyang
+     * @since 2020-07-08 15:48:17 v1.0
+     * @param topic topic
+     * @return [T data]
+     */
+    @Override
+    public String poll(String topic) {
+        if (StringUtils.isBlank(topic)) {
+            throw new IllegalArgumentException("topic can't be blank");
+        }
+
+        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(topic);
+        return queue.poll();
+    }
+
+    /**
+     *<p>
+     * 删除
+     *</p>
+     *
+     * @author liuyang
+     * @since 2020-07-08 15:53:52 v1.0
+     * @param topic topic
+     * @param jobId jobId
+     * @return boolean
+     */
+    @Override
+    public boolean remove(String topic, String jobId) {
+        if (StringUtils.isBlank(topic)) {
+            throw new IllegalArgumentException("topic can't be blank");
+        }
+        if (StringUtils.isBlank(jobId)) {
+            throw new IllegalArgumentException("jobId can't be blank");
+        }
+
+        RBlockingQueue<String> queue = redissonClient.getBlockingQueue(topic);
+        return queue.remove(jobId);
+    }
+}

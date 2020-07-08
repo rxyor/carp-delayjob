@@ -3,3 +3,6 @@ server:
 spring:
   application:
     name: carp-dealyjob-samples
+  redis:
+    host: carp.dev
+    port: 6379
