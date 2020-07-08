@@ -1,0 +1,14 @@
+#mac os
+.DS_Store
+#gradle
+.gradle
+#idea
+.idea
+*.iml
+out
+gen
+target
+#log
+*.log
+*.log.gz
+
