@@ -1,10 +1,8 @@
 package com.github.rxyor.carp.delayjob.core;
 
-import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 import org.redisson.api.RScoredSortedSet;
 import org.redisson.api.RedissonClient;
-import org.redisson.client.protocol.ScoredEntry;
 
 /**
  *<p>
@@ -14,9 +12,9 @@ import org.redisson.client.protocol.ScoredEntry;
  * @author liuyang
  * @since 2020-07-08 v1.0
  */
-public class WaitSortedSet extends ClientConfig {
+public class WaitZSet extends ClientConfig {
 
-    public WaitSortedSet(RedissonClient redissonClient, KeyConfig keyConfig) {
+    public WaitZSet(RedissonClient redissonClient, KeyConfig keyConfig) {
         super(redissonClient, keyConfig);
     }
 
@@ -50,23 +48,10 @@ public class WaitSortedSet extends ClientConfig {
      *
      * @author liuyang
      * @since 2020-07-08 18:12:29 v1.0
-     * @param startTime startTime
-     * @param endTime endTime
-     * @return [Collection<ScoredEntry < String>>]
+     * @return [RScoredSortedSet < String>]
      */
-    public Collection<ScoredEntry<String>> range(Long startTime, Long endTime) {
-        if (startTime < 0) {
-            throw new IllegalArgumentException("startTime must >=0");
-        }
-        if (endTime < 0) {
-            throw new IllegalArgumentException("endTime must >=0");
-        }
-        if (endTime < startTime) {
-            throw new IllegalArgumentException("endTime must >= startTime");
-        }
-
-        RScoredSortedSet<String> bucket = redissonClient.getScoredSortedSet(keyConfig.waitQueueKey());
-        return bucket.entryRange(startTime, true, endTime, true);
+    public RScoredSortedSet<String> getRScoredSortedSet() {
+        return redissonClient.getScoredSortedSet(keyConfig.waitQueueKey());
     }
 
 

@@ -12,9 +12,9 @@ import org.redisson.api.RedissonClient;
  * @author liuyang
  * @since 2020-07-08 v1.0
  */
-public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
+public class ReadyQueue extends ClientConfig {
 
-    public RedisQueueImpl(RedissonClient redissonClient, KeyConfig keyConfig) {
+    public ReadyQueue(RedissonClient redissonClient, KeyConfig keyConfig) {
         super(redissonClient, keyConfig);
     }
 
@@ -29,7 +29,6 @@ public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
      * @param jobId jobId
      * @return boolean
      */
-    @Override
     public boolean offer(String topic, String jobId) {
         if (StringUtils.isBlank(topic)) {
             throw new IllegalArgumentException("topic can't be blank");
@@ -52,7 +51,6 @@ public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
      * @param topic topic
      * @return [T data]
      */
-    @Override
     public String poll(String topic) {
         if (StringUtils.isBlank(topic)) {
             throw new IllegalArgumentException("topic can't be blank");
@@ -73,7 +71,6 @@ public class RedisQueueImpl extends ClientConfig implements RedisQueue<String> {
      * @param jobId jobId
      * @return boolean
      */
-    @Override
     public boolean remove(String topic, String jobId) {
         if (StringUtils.isBlank(topic)) {
             throw new IllegalArgumentException("topic can't be blank");

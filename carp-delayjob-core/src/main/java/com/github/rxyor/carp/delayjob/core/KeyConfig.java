@@ -43,9 +43,14 @@ public class KeyConfig {
     /**
      * 应用名
      */
-    private String appName;
+    private final String appName;
 
-    private KeyConfig() {
+    public KeyConfig(String appName) {
+        if (StringUtils.isBlank(appName)) {
+            this.appName = DEFAULT_APP_NAME;
+        } else {
+            this.appName = appName;
+        }
     }
 
     public String waitQueueKey() {
