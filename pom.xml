@@ -14,7 +14,6 @@
         <module>carp-delayjob-starter</module>
     </modules>
 
-
     <properties>
         <!--0: project-->
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -51,7 +50,7 @@
         <guava.version>23.0</guava.version>
         <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
         <jackson.version>2.10.0</jackson.version>
-        <joda-time.version>2.10.4</joda-time.version>
+        <joda-time.version>2.10.5</joda-time.version>
         <junit-platform-runner.version>1.5.2</junit-platform-runner.version>
         <junit.version>4.12</junit.version>
         <junit5.version>5.5.2</junit5.version>
@@ -269,6 +268,11 @@
                 <version>${springfox-swagger2.version}</version>
             </dependency>
             <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
@@ -349,12 +353,12 @@
                 <version>${redisson.version}</version>
                 <exclusions>
                     <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-logging</artifactId>
-                    </exclusion>
-                    <exclusion>
                         <groupId>org.redisson</groupId>
                         <artifactId>redisson-spring-data-21</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
