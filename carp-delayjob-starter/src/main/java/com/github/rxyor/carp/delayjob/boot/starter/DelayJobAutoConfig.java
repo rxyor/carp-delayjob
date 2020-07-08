@@ -62,17 +62,17 @@ public class DelayJobAutoConfig {
 
     @Bean
     public Producer producer(WaitJobZSetRepository waitJobZSetRepository,
-        JobDetailMapRepository jobDetailMapRepository) {
-        return new ProducerImpl(waitJobZSetRepository, jobDetailMapRepository);
+        JobDetailMapRepository jobDetailMapRepository, JobHandlerDelegate jobHandlerDelegate) {
+        return new ProducerImpl(waitJobZSetRepository, jobDetailMapRepository, jobHandlerDelegate);
     }
 
     @Bean(initMethod = "startup", destroyMethod = "shutdown")
     public ScanProcessor scanner(WaitJobZSetRepository waitJobZSetRepository,
         ReadyJobQueueRepository readyJobQueueRepository, JobDetailMapRepository jobDetailMapRepository,
         FailJobSetRepository failJobSetRepository,
-        Producer producer, JobHandlerDelegate delegate) {
+        Producer producer, JobHandlerDelegate jobHandlerDelegate) {
         return new ScanProcessor(waitJobZSetRepository, readyJobQueueRepository, jobDetailMapRepository,
-            failJobSetRepository, producer, delegate);
+            failJobSetRepository, producer, jobHandlerDelegate);
     }
 
 }

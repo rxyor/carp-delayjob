@@ -1,11 +1,15 @@
 package com.github.rxyor.carp.delayjob.core.producer;
 
+import com.github.rxyor.carp.delayjob.core.consumer.Consumer;
+import com.github.rxyor.carp.delayjob.core.handler.JobHandlerDelegate;
 import com.github.rxyor.carp.delayjob.core.model.DelayJob;
 import com.github.rxyor.carp.delayjob.core.repository.JobDetailMapRepository;
 import com.github.rxyor.carp.delayjob.core.repository.WaitJobZSetRepository;
 import com.github.rxyor.carp.delayjob.core.util.IdUtil;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -20,13 +24,17 @@ public class ProducerImpl implements Producer {
 
     private final WaitJobZSetRepository waitJobZSetRepository;
     private final JobDetailMapRepository jobDetailMapRepository;
+    private final JobHandlerDelegate jobHandlerDelegate;
 
-    public ProducerImpl(WaitJobZSetRepository waitJobZSetRepository, JobDetailMapRepository jobDetailMapRepository) {
+    public ProducerImpl(WaitJobZSetRepository waitJobZSetRepository,
+        JobDetailMapRepository jobDetailMapRepository, JobHandlerDelegate jobHandlerDelegate) {
         Objects.requireNonNull(waitJobZSetRepository, "waitZSet can't be null");
         Objects.requireNonNull(jobDetailMapRepository, "jobStoreMap can't be null");
+        Objects.requireNonNull(jobDetailMapRepository, "jobHandlerDelegate can't be null");
 
         this.waitJobZSetRepository = waitJobZSetRepository;
         this.jobDetailMapRepository = jobDetailMapRepository;
+        this.jobHandlerDelegate = jobHandlerDelegate;
     }
 
     /**
@@ -92,6 +100,13 @@ public class ProducerImpl implements Producer {
         }
         if (StringUtils.isBlank(delayJob.getId())) {
             delayJob.setId(IdUtil.randomId());
+        }
+
+        List<String> allTopic = jobHandlerDelegate.getConsumers().stream().map(Consumer::topic)
+            .collect(Collectors.toList());
+        if (!allTopic.contains(delayJob.getTopic())) {
+            throw new UnsupportedOperationException(
+                String.format("topic:[%s] which no consumer can consume, can't be offer", delayJob.getTopic()));
         }
 
         waitJobZSetRepository.offer(delayJob.getId(), delayJob.getExecTime());
