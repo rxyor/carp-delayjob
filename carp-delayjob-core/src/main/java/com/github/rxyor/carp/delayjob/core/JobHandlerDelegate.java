@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 @Slf4j
 public class JobHandlerDelegate implements JobHandler {
 
+    private final static JobHandlerDelegate INSTANCE = new JobHandlerDelegate();
     /**
      * 消费者列表
      */
@@ -26,6 +27,13 @@ public class JobHandlerDelegate implements JobHandler {
      * 同步锁
      */
     private final Object LOCK = new Object();
+
+    private JobHandlerDelegate() {
+    }
+
+    public static JobHandlerDelegate getSingleStance() {
+        return INSTANCE;
+    }
 
     /**
      * consume DelayJob
@@ -66,7 +74,7 @@ public class JobHandlerDelegate implements JobHandler {
      * @param consumer 任务处理器
      * @return Boolean
      */
-    public Boolean addConsumer(Consumer consumer) {
+    public Boolean registerConsumer(Consumer consumer) {
         Objects.requireNonNull(consumer, "Consumer can't be null");
 
         if (StringUtils.isBlank(consumer.topic())) {

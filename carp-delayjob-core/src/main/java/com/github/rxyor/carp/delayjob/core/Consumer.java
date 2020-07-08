@@ -17,4 +17,9 @@ public interface Consumer extends JobHandler {
      */
     String topic();
 
+    /**
+     * 需要把自身注册到JobHandlerDelegate
+     */
+    void register();
+
 }

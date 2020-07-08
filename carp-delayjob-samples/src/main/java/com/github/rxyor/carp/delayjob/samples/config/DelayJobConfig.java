@@ -35,7 +35,7 @@ public class DelayJobConfig {
 
     @Bean
     public JobHandlerDelegate jobHandlerDelegate() {
-        return new JobHandlerDelegate();
+        return JobHandlerDelegate.getSingleStance();
     }
 
     @Bean
@@ -83,7 +83,7 @@ public class DelayJobConfig {
                 return Result.FAIL;
             }
         };
-        jobHandlerDelegate.addConsumer(consumer);
+        jobHandlerDelegate.registerConsumer(consumer);
         return consumer;
     }
 
