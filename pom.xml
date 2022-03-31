@@ -64,7 +64,7 @@
         <redisson.version>3.13.2</redisson.version>
         <rocketmq-spring-boot-starter.version>2.1.0</rocketmq-spring-boot-starter.version>
         <seata-all.version>1.2.0</seata-all.version>
-        <spring-boot.version>2.3.0.RELEASE</spring-boot.version>
+        <spring-boot.version>2.5.12</spring-boot.version>
         <spring-cloud-alibaba.version>2.2.0.RELEASE</spring-cloud-alibaba.version>
         <spring-cloud-dependencies.version>Hoxton.RELEASE</spring-cloud-dependencies.version>
         <spring-data-elasticsearch.version>3.2.3.RELEASE</spring-data-elasticsearch.version>
