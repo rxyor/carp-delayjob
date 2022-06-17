@@ -46,7 +46,7 @@
         <elasticsearch-rest-high-level-client.version>7.1.0
         </elasticsearch-rest-high-level-client.version>
         <elasticsearch.verision>7.1.0</elasticsearch.verision>
-        <fastjson.version>1.2.66</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <guava.version>23.0</guava.version>
         <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
         <jackson.version>2.10.0</jackson.version>
