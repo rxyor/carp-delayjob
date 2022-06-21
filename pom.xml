@@ -59,7 +59,7 @@
         <mybatis-boot.version>2.1.1</mybatis-boot.version>
         <mybatis-plus.version>3.2.0</mybatis-plus.version>
         <mybatis-spring-boot-autoconfigure.version>2.1.1</mybatis-spring-boot-autoconfigure.version>
-        <mysql-connector-java.version>5.1.31</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <reactor-core.version>3.3.0.RELEASE</reactor-core.version>
         <redisson.version>3.13.2</redisson.version>
         <rocketmq-spring-boot-starter.version>2.1.0</rocketmq-spring-boot-starter.version>
